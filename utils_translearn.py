@@ -8,6 +8,7 @@
 import tensorflow as tf
 import numpy as np
 from keras import backend as K
+from keras.applications.vgg16 import preprocess_input
 from keras.preprocessing import image
 import h5py
 
@@ -158,6 +159,10 @@ def fix_gpu_memory(mem_fraction=1):
 
     gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=mem_fraction)
     tf_config = tf.ConfigProto(gpu_options=gpu_options)
+    # 
+    # tf_config = tf.ConfigProto(allow_soft_placement=True)
+    tf_config.gpu_options.allocator_type = 'BFC'
+    # 
     tf_config.gpu_options.allow_growth = True
     tf_config.log_device_placement = False
     tf_config.allow_soft_placement = True
@@ -182,7 +187,7 @@ def cal_rmsd(X, X_adv):
 def preprocess(X, method):
 
     # assume color last
-    assert method in {'raw', 'imagenet', 'inception', 'mnist'}
+    assert method in {'raw', 'imagenet', 'inception', 'mnist', 'vgg16-base'}
 
     if method is 'raw':
         pass
@@ -192,6 +197,8 @@ def preprocess(X, method):
         X = inception_preprocessing(X)
     elif method is 'mnist':
         X = mnist_preprocessing(X)
+    elif method is 'vgg16-base' or method == 'vgg16-base':
+        X = preprocess_input(X)
     else:
         raise Exception('unknown method %s' % method)
 
@@ -201,11 +208,11 @@ def preprocess(X, method):
 def reverse_preprocess(X, method):
 
     # assume color last
-    assert method in {'raw', 'imagenet', 'inception', 'mnist'}
+    assert method in {'raw', 'imagenet', 'inception', 'mnist', 'vgg16-base'}
 
     if method is 'raw':
         pass
-    elif method is 'imagenet':
+    elif method is 'imagenet' or method is 'vgg16-base' or method == 'vgg16-base':
         X = imagenet_reverse_preprocessing(X)
     elif method is 'inception':
         X = inception_reverse_preprocessing(X)

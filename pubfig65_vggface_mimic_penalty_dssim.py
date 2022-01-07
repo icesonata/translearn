@@ -10,6 +10,7 @@ import time
 import numpy as np
 import keras.backend as K
 K.set_learning_phase(0)
+from keras.applications.vgg16 import preprocess_input
 from keras.models import Model
 from keras.models import load_model
 
@@ -28,18 +29,18 @@ import itertools
 
 # parameters about the model
 
-NB_CLASSES = 65
+NB_CLASSES = 10
 IMG_ROW = 224
 IMG_COL = 224
 IMG_COLOR = 3
-INTENSITY_RANGE = 'imagenet'
+INTENSITY_RANGE = 'vgg16-base'
 
 # parameters about dataset/model/result path
 
-TEACHER_MODEL_FILE = 'models/vggface.h5'
-STUDENT_MODEL_FILE = 'models/pubfig65_vggface_trans_nbtrain_90.h5'
-DATA_FILE = 'datasets/pubfig65_imagenet_test.h5'
-RESULT_DIR = './pubfig65'
+TEACHER_MODEL_FILE = 'models/vgg16.h5'
+STUDENT_MODEL_FILE = 'models/extractor__tl_model_v1.weights.best.hdf5'
+DATA_FILE = 'datasets/food101_image_test.h5'
+RESULT_DIR = './food101'
 
 # parameters used for attack
 
@@ -49,7 +50,7 @@ BATCH_SIZE = 1  # number of images being processed simultaneously, default is 1
 NB_PAIR = 2  # number of pairs of source, target image
 
 DSSIM_THRESHOLD = 0.001  # DSSIM budget of perturbation
-CUTOFF_LAYER = 38  # Layer ID of the bottleneck layer (actual ID - 1)
+CUTOFF_LAYER = 19  # Layer ID of the bottleneck layer (actual ID - 1)
 
 INITIAL_CONST = 1e10  # Penalty coefficient. Controls how tight the bound is
 LR = 1  # Learning rate of the optimizer
@@ -73,7 +74,8 @@ def load_dataset(data_file=DATA_FILE):
     Y = Y.astype(np.float32)
 
     X = utils_translearn.preprocess(X, INTENSITY_RANGE)
-    Y = np.argmax(Y, axis=1)
+    # Y = np.argmax(Y, axis=1)
+    Y = np.array(Y, dtype=np.int64)
 
     return X, Y
 

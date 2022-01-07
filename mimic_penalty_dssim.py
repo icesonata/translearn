@@ -12,6 +12,7 @@ import datetime
 import time
 from decimal import Decimal
 
+from keras.applications.vgg16 import preprocess_input
 from utils_translearn import preprocess, reverse_preprocess, cal_rmsd
 from msssim_tf import MultiScaleSSIM
 
@@ -78,7 +79,7 @@ class MimicPenaltyDSSIM:
         verbose: Whether to output the intermediate log or not.
         """
 
-        assert intensity_range in {'raw', 'imagenet', 'inception', 'mnist'}
+        assert intensity_range in {'raw', 'imagenet', 'inception', 'mnist', 'vgg16-base'}
 
         # constant used for tanh transformation to avoid corner cases
         self.tanh_constant = 2 - 1e-6
@@ -158,7 +159,7 @@ class MimicPenaltyDSSIM:
                              0.5) * 255.0
 
         # convert source and adversarial image into input space
-        if self.intensity_range == 'imagenet':
+        if self.intensity_range == 'imagenet' or self.intensity_range == 'vgg16-base':
             mean = tf.constant(np.repeat([[[[103.939, 116.779, 123.68]]]],
                                          self.batch_size,
                                          axis=0),

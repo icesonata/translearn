@@ -28,15 +28,15 @@ import utils_translearn
 
 # parameters about the model
 
-NB_CLASSES = 65
+NB_CLASSES = 10
 IMG_ROW = 224
 IMG_COL = 224
 IMG_COLOR = 3
-INTENSITY_RANGE = 'imagenet'
+INTENSITY_RANGE = 'vgg16-base'
 
 # parameters about dataset/model/result path
 
-STUDENT_MODEL_FILE = 'models/pubfig65-vggface-trans-nb-train-90.h5'
+STUDENT_MODEL_FILE = 'models/extractor__tl_model_v1.weights.best.hdf5'
 
 # parameters used for attack
 
@@ -46,7 +46,7 @@ BATCH_SIZE = 1
 NB_IMGS = 1
 
 DSSIM_THRESHOLD = 1
-CUTOFF_LAYER = 22
+CUTOFF_LAYER = 19
 
 INITIAL_CONST = 1e10
 LR = 1
