@@ -28,16 +28,16 @@ import utils_translearn
 
 # parameters about the model
 
-NB_CLASSES = 65
+NB_CLASSES = 10
 IMG_ROW = 224
 IMG_COL = 224
 IMG_COLOR = 3
-INTENSITY_RANGE = 'imagenet'
+INTENSITY_RANGE = 'vgg16-base'
 
 # parameters about dataset/model/result path
 
 TEACHER_MODEL_FILE = 'models/vggface.h5'
-STUDENT_MODEL_FILE = 'models/pubfig65-vggface-trans-nb-train-90.h5'
+STUDENT_MODEL_FILE = 'models/extractor__tl_model_v1.weights.best.hdf5'
 
 # parameters used for attack
 
@@ -48,7 +48,7 @@ NB_IMGS = 1  # number of fingerprinting images generated
 
 # set to 1 here, as we do not care about how the image looks like
 DSSIM_THRESHOLD = 1
-CUTOFF_LAYER = 38  # ID of bottleneck layer
+CUTOFF_LAYER = 19  # ID of bottleneck layer
 
 INITIAL_CONST = 1e10  # Penalty coefficient. Controls how tight the bound is
 LR = 1  # Learning rate of the optimizer
